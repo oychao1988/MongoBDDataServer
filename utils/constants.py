@@ -1,0 +1,1 @@
+PER_PAGE_MAX_NUM = 50
