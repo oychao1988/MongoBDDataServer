@@ -1,0 +1,138 @@
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [19/Oct/2018 22:57:49] "GET /recruits/duplicateChecking/fafafa2324234 HTTP/1.0" 200 -
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [19/Oct/2018 23:47:51] "GET /recruits/duplicateChecking/fafafa2324234 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 00:11:12] "GET /recruits/duplicateChecking/fafafa2324234 HTTP/1.0" 200 -
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:32:27] "GET /lagou HTTP/1.0" 404 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:33:15] "GET /lagou?page=1 HTTP/1.0" 404 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:33:30] "GET / HTTP/1.0" 404 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:33:30] "GET /favicon.ico HTTP/1.0" 404 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:33:37] "GET /duplicateChecking/456 HTTP/1.0" 404 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:33:46] "GET /recruits/duplicateChecking/456 HTTP/1.0" 404 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:34:35] "GET /recruits/lagou HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:34:49] "GET /recruits/lagou?page=1 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:36:08] "GET /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 500 -
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:37:17] "GET /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 500 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:39:00] "GET /recruits/lagou HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/models.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:40:37] "GET /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:42:18] "POST /recruits/duplicateChecking HTTP/1.0" 500 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:45:02] "POST /recruits/duplicateChecking HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:46:44] "POST /recruits/duplicateChecking HTTP/1.0" 500 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:57:13] "POST /recruits/duplicateChecking HTTP/1.0" 500 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 09:57:51] "POST /recruits/duplicateChecking HTTP/1.0" 500 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:01:01] "POST /recruits/duplicateChecking HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:01:31] "POST /recruits/duplicateChecking HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:04:14] "POST /recruits/duplicateChecking HTTP/1.0" 500 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:04:49] "GET /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:05:08] "GET /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:08:15] "POST /recruits/duplicateChecking HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:11:39] "POST /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 500 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:11:39] "POST /recruits/duplicateChecking HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:12:19] "GET /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 500 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88  * Running on http://127.0.0.1:5021/ (Press CTRL+C to quit)
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:28:41] "GET /recruits/duplicateChecking?number=1&updateDate=2018-10-20 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:30:19] "GET /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-18%2012:08:05 HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:42:11] "GET /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-18%2012:08:05 HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:45:50] "GET /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-18%2012:08:05 HTTP/1.0" 500 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:47:56] "GET /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-18%2012:08:05 HTTP/1.0" 500 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:54:44] "GET /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-18%2012:08:05 HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 10:59:26] "PUT /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-20%2010:58:05 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 11:00:45] "PUT /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-20%2010:58:05 HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 11:01:59] "PUT /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-21%2010:58:05 HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 11:02:25] "PUT /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-21%2010:58:05 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 11:02:36] "PUT /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-20%2010:58:05 HTTP/1.0" 200 -
+INFO _internal.py:88  * Detected change in '/home/oychao/Documents/Projects/MongoDBDataServer/apps/recruit/views.py', reloading
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 134-097-667
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 11:05:56] "DELETE /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-20%2010:58:05 HTTP/1.0" 200 -
+INFO _internal.py:88 127.0.0.1 - - [20/Oct/2018 11:06:13] "GET /recruits/duplicateChecking?number=CC237101814J00144096106&updateDate=2018-10-20%2010:58:05 HTTP/1.0" 200 -

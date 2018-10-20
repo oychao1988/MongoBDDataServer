@@ -6,7 +6,8 @@ class FingerPrint(mongodb.Document):
     meta = {
         'collection': 'fingerPrint'
     }
-    fp = mongodb.StringField()
+    number = mongodb.StringField()
+    updateDate = mongodb.DateTimeField()
 
 
 # 拉勾招聘信息
@@ -79,3 +80,48 @@ class LagouData(mongodb.Document):
                          businessZones\t:%s
                       """ % (self.companyFullName, self.createTime, self.positionName, self.salary, self.businessZones)
         return description
+
+# 智联招聘信息
+class ZhilianItem(mongodb.Document):
+    # 指定集合名称
+    meta = {'collection': 'zhilianRecruit',
+            'ordering': ['-updateDate'],
+            'strict': False,
+            }
+
+    applied = mongodb.StringField()
+    applyType = mongodb.StringField()
+    city = mongodb.StringField()
+    collected = mongodb.StringField()
+    company = mongodb.StringField()
+    companyLogo = mongodb.StringField()
+    createDate = mongodb.StringField()
+    duplicated = mongodb.StringField()
+    eduLevel = mongodb.StringField()
+    emplType = mongodb.StringField()
+    endDate = mongodb.StringField()
+    expandCount = mongodb.StringField()
+    feedbackRation = mongodb.StringField()
+    futureJob = mongodb.StringField()
+    geo = mongodb.StringField()
+    industry = mongodb.StringField()
+    interview = mongodb.StringField()
+    isShow = mongodb.StringField()
+    jobName = mongodb.StringField()
+    jobType = mongodb.StringField()
+    number = mongodb.StringField()
+    positionLabel = mongodb.StringField()
+    positionURL = mongodb.StringField()
+    rate = mongodb.StringField()
+    recruitCount = mongodb.StringField()
+    resumeCount = mongodb.StringField()
+    salary = mongodb.StringField()
+    saleType = mongodb.StringField()
+    score = mongodb.StringField()
+    selected = mongodb.StringField()
+    showLicence = mongodb.StringField()
+    tags = mongodb.StringField()
+    timeState = mongodb.StringField()
+    updateDate = mongodb.StringField()
+    welfare = mongodb.StringField()
+    workingExp = mongodb.StringField()
