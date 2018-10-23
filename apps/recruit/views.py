@@ -119,8 +119,15 @@ class DuplicateCheckingView(views.MethodView):
 # /lagou 拉勾招聘信息数据视图
 class LagouRecruitDataView(views.MethodView):
     def get(self):
-        positionId = request.args.get('positionId')
+        # 控制参数范围
+        args = {k:v for k, v in request.args.items()}
+        args_keys = [k for k in args]
+        validation = [[], ['positionId'], ['page'], ['per_page'], ['page', 'per_page']]
+        if args_keys not in validation:
+            return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
+
         # 单个数据
+        positionId = request.args.get('positionId')
         if positionId:
             try:
                 positionId = int(positionId)
@@ -159,7 +166,8 @@ class LagouRecruitDataView(views.MethodView):
 
     def post(self):
         # 获取参数
-        data_dict = request.form
+        data_dict = {k:v for k,v in request.form.items()}
+
         # 校验参数
         # 保存数据
         try:
@@ -168,8 +176,8 @@ class LagouRecruitDataView(views.MethodView):
             current_app.logger.error(e)
             return jsonify(errno=RET.DBERR, errmsg='数据验证错误')
         # 返回结果
-        print(lagouData.__dict__)
-        return jsonify(lagouData.__dict__)
+        print(lagouData.to_dict())
+        return jsonify(lagouData.to_dict())
 
 recruit_bp.add_url_rule('/duplicateChecking', view_func=DuplicateCheckingView.as_view('duplicateCheckingView'))
 recruit_bp.add_url_rule('/lagou', view_func=LagouRecruitDataView.as_view('lagouView'))
