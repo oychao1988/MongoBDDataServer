@@ -12,6 +12,7 @@ class RET:
     USERERR             = "4104"
     ROLEERR             = "4105"
     PWDERR              = "4106"
+    UPDATE              = "4107"
     REQERR              = "4201"
     IPERR               = "4202"
     THIRDERR            = "4301"
@@ -21,6 +22,7 @@ class RET:
 
 error_map = {
     RET.OK                    : u"成功",
+    RET.UPDATE                : u"数据可更新",
     RET.DBERR                 : u"数据库查询错误",
     RET.NODATA                : u"无数据",
     RET.DATAEXIST             : u"数据已存在",

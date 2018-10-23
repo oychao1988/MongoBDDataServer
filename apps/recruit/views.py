@@ -1,11 +1,8 @@
-import json
-
-from datetime import datetime
 from flask import current_app, jsonify
 from flask import request
 from flask import views
 
-from models import FingerPrint
+from models import FingerPrint, LagouData
 from utils import constants
 from utils.response_code import RET
 from . import recruit_bp
@@ -22,64 +19,75 @@ class DuplicateCheckingView(views.MethodView):
         """
         try:
             number = request.args.get('number')
-            updateDate = request.args.get('updateDate')
-            updateDate = datetime.strptime(updateDate, '%Y-%m-%d %H:%M:%S')
+            source = request.args.get('source')
+            # timestamp = datetime.timestamp(updateDate)
         except Exception as e:
+            current_app.logger.error(e)
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
-        if not all([number, updateDate]):
+        if not all([number, source]):
             return jsonify(errno=RET.PARAMERR, errmsg='参数不足')
 
-        fingerprint = FingerPrint.objects(number=number).first()
-        # 能查到number
+        fingerprint = FingerPrint.objects(number=number, source=source).first()
         if fingerprint:
-            # 比较更新日期
-            if updateDate > fingerprint['updateDate']:
-                return jsonify(errno=RET.UPDATE, errmsg='需要可更新')
-            else:
-                data = {#'id': fingerprint.id, # TODO 如何返回ID
-                        'number': fingerprint.number,
-                        'updateDate': fingerprint.updateDate}
-                return jsonify(errno=RET.OK, errmsg='成功', data=data)
-        return jsonify(errno=RET.NODATA, errmsg='无数据')
+            data = {  # 'id': fingerprint.id, # TODO 如何返回ID
+                'number': fingerprint.number,
+                'updateDate': fingerprint.updateDate,
+                'source': fingerprint.source
+            }
+            return jsonify(errno=RET.OK, errmsg='OK', data=data)
+        else:
+            return jsonify(errno=RET.NODATA, errmsg='无数据')
 
     # POST保存指纹
     def post(self):
         try:
-            number = request.args.get('number')
-            updateDate = request.args.get('updateDate')
-            updateDate = datetime.strptime(updateDate, '%Y-%m-%d %H:%M:%S')
+            number = request.form.get('number')
+            updateDate = int(request.form.get('updateDate'))
+            source = request.form.get('source')
         except Exception as e:
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
-        if not all([number, updateDate]):
+        if not all([number, updateDate, source]):
             return jsonify(errno=RET.PARAMERR, errmsg='参数不足')
 
-        fingerprint = FingerPrint.objects(number=number).first()
-        # 能查到number
-        if fingerprint:
-            return jsonify(errno=RET.DATAEXIST, errmsg='数据已存在')
-        fingerprint = FingerPrint(number=number, updateDate=updateDate).save()
-
+        try:
+            fingerprint = FingerPrint(number=number, updateDate=updateDate, source=source).save()
+        except Exception as e:
+            current_app.logger.error(e)
+            fingerprint = FingerPrint.objects(number=number, source=source).first()
+            # 比较更新日期
+            if updateDate > fingerprint['updateDate']:
+                fingerprint.update(updateDate=updateDate)
+                data = {  # 'id': fingerprint.id, # TODO 如何返回ID
+                    'number': fingerprint.number,
+                    'updateDate': fingerprint.updateDate,
+                    'source': fingerprint.source
+                }
+                return jsonify(errno=RET.UPDATE, errmsg='数据已更新', data=data)
+            else:
+                return jsonify(errno=RET.DATAEXIST, errmsg='已存在最新数据')
         # 组织返回数据
         data = {  # 'id': fingerprint.id, # TODO 如何返回ID
             'number': fingerprint.number,
-            'updateDate': fingerprint.updateDate}
+            'updateDate': fingerprint.updateDate,
+            'source': fingerprint.source}
 
-        return jsonify(errno=RET.OK, errmsg='成功', data=data)
+        return jsonify(errno=RET.OK, errmsg='数据提交成功', data=data)
 
     # PUT修改指纹
     def put(self):
         try:
             number = request.args.get('number')
-            updateDate = request.args.get('updateDate')
-            updateDate = datetime.strptime(updateDate, '%Y-%m-%d %H:%M:%S')
+            updateDate = int(request.args.get('updateDate'))
+            source = request.args.get('source')
+            # updateDate = datetime.strptime(updateDate, '%Y-%m-%d %H:%M:%S')
         except Exception as e:
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
-        if not all([number, updateDate]):
+        if not all([number, updateDate, source]):
             return jsonify(errno=RET.PARAMERR, errmsg='参数不足')
-        fingerprint = FingerPrint.objects(number=number).first()
+        fingerprint = FingerPrint.objects(number=number, source=source).first()
         if not fingerprint:
             return jsonify(errno=RET.NODATA, errmsg='无数据')
         # 更新数据
@@ -88,52 +96,80 @@ class DuplicateCheckingView(views.MethodView):
         fingerprint = FingerPrint.objects(number=number).first()
         data = {  # 'id': fingerprint.id, # TODO 如何返回ID
             'number': fingerprint.number,
-            'updateDate': fingerprint.updateDate}
+            'updateDate': fingerprint.updateDate,
+            'source': fingerprint.source}
         return jsonify(errno=RET.OK, errmsg='成功', data=data)
 
     # DELETE删除指纹
     def delete(self):
         try:
             number = request.args.get('number')
+            source = request.args.get('source')
         except Exception as e:
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
-        if not number:
+        if not [number, source]:
             jsonify(errno=RET.PARAMERR, errmsg='参数不足')
 
-        fingerPrint = FingerPrint.objects(number=number).first()
+        fingerPrint = FingerPrint.objects(number=number, source=source).first()
         if not fingerPrint:
             return jsonify(errno=RET.NODATA, errmsg='无数据')
         fingerPrint.delete()
-        return jsonify(errno=RET.OK, errmsg='成功')
 
 # /lagou 拉勾招聘信息数据视图
 class LagouRecruitDataView(views.MethodView):
     def get(self):
-        page = request.args.get('page', 1)
-        per_page = request.args.get('per_page', constants.PER_PAGE_MAX_NUM)
+        positionId = request.args.get('positionId')
+        # 单个数据
+        if positionId:
+            try:
+                positionId = int(positionId)
+            except Exception as e:
+                current_app.logger.error(e)
+                return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
 
-        try:
-            page = int(page)
-            per_page = int(per_page)
-        except Exception as e:
-            current_app.logger.error(e)
-            return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
+            from models import LagouData
+            position_data = LagouData.objects(positionId=positionId).first()
+            if not position_data:
+                return jsonify(errno=RET.NODATA, errmsg='数据不存在')
+            return jsonify(errno=RET.OK, errmsg='OK', data=position_data.to_dict())
 
-        from models import LagouData
-        paginate = LagouData.objects.paginate(page=page, per_page=per_page)
-        items = paginate.items
-        total_page = paginate.pages
-        current_page = paginate.page
-        recruit_data = {
-            'recruits_list': items,
-            'current_page': current_page,
-            'total_page': total_page
-        }
-        return jsonify(errno=RET.OK, errmsg='查询招聘信息列表', data=recruit_data)
+        # 多个数据
+        else:
+            try:
+                page = request.args.get('page', 1)
+                per_page = request.args.get('per_page', constants.PER_PAGE_MAX_NUM)
+                page = int(page)
+                per_page = int(per_page)
+            except Exception as e:
+                current_app.logger.error(e)
+                return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
+
+            from models import LagouData
+            paginate = LagouData.objects.paginate(page=page, per_page=per_page)
+            items = paginate.items
+            total_page = paginate.pages
+            current_page = paginate.page
+            recruit_data = {
+                'recruits_list': items,
+                'current_page': current_page,
+                'total_page': total_page
+            }
+            return jsonify(errno=RET.OK, errmsg='查询招聘信息列表', data=recruit_data)
 
     def post(self):
-        return
+        # 获取参数
+        data_dict = request.form
+        # 校验参数
+        # 保存数据
+        try:
+            lagouData = LagouData(**data_dict).save()
+        except Exception as e:
+            current_app.logger.error(e)
+            return jsonify(errno=RET.DBERR, errmsg='数据验证错误')
+        # 返回结果
+        print(lagouData.__dict__)
+        return jsonify(lagouData.__dict__)
 
 recruit_bp.add_url_rule('/duplicateChecking', view_func=DuplicateCheckingView.as_view('duplicateCheckingView'))
 recruit_bp.add_url_rule('/lagou', view_func=LagouRecruitDataView.as_view('lagouView'))

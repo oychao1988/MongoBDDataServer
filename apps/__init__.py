@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_mongoengine import MongoEngine
 
-from config import config_dict
+from config import config_dict, RegexConverter
 
 mongodb = MongoEngine()
 def create_log(config_name):
@@ -33,6 +33,9 @@ def create_app(config_name):
     # 配置信息
     config_class = config_dict[config_name]
     app.config.from_object(config_class)
+    # 自定义正则转换器
+    app.url_map.converters['re'] = RegexConverter
+
     # 加载数据库对象
     mongodb.init_app(app)
 

@@ -1,4 +1,5 @@
 import logging
+from werkzeug.routing import BaseConverter
 
 class Config(object):
     MONGODB_SETTINGS = {
@@ -14,10 +15,16 @@ class DevelepmentConfig(Config):
     DEBUG = True
     LOG_LEVEL = logging.DEBUG
 
+
 class ProductionConfig(Config):
     DEBUG = False
     LOG_LEVEL = logging.WARNING
 
+
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *args):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = args[0]
 
 config_dict = {'develepment': DevelepmentConfig,
           'production': ProductionConfig}
