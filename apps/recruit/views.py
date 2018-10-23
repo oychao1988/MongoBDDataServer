@@ -115,20 +115,18 @@ class DuplicateCheckingView(views.MethodView):
         if not fingerPrint:
             return jsonify(errno=RET.NODATA, errmsg='无数据')
         fingerPrint.delete()
+        return jsonify(errno=RET.OK, errmsg='OK')
 
 # /lagou 拉勾招聘信息数据视图
 class LagouRecruitDataView(views.MethodView):
-    def get(self):
-        # 控制参数范围
-        args = {k:v for k, v in request.args.items()}
-        args_keys = [k for k in args]
-        validation = [[], ['positionId'], ['page'], ['per_page'], ['page', 'per_page']]
-        if args_keys not in validation:
-            return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
-
+    def get(self, positionId):
+        args = {k: v for k, v in request.args.items()}
         # 单个数据
-        positionId = request.args.get('positionId')
         if positionId:
+            # 禁止添加查询字符串
+            if args:
+                return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
+            # 参数验证
             try:
                 positionId = int(positionId)
             except Exception as e:
@@ -143,6 +141,11 @@ class LagouRecruitDataView(views.MethodView):
 
         # 多个数据
         else:
+            # 控制参数范围
+            args_keys = [k for k in args]
+            allow_args = [[], ['page'], ['per_page'], ['page', 'per_page']]
+            if args_keys not in allow_args:
+                return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
             try:
                 page = request.args.get('page', 1)
                 per_page = request.args.get('per_page', constants.PER_PAGE_MAX_NUM)
@@ -164,7 +167,7 @@ class LagouRecruitDataView(views.MethodView):
             }
             return jsonify(errno=RET.OK, errmsg='查询招聘信息列表', data=recruit_data)
 
-    def post(self):
+    def post(self, positionId):
         # 获取参数
         data_dict = {k:v for k,v in request.form.items()}
         # 保存数据
@@ -176,5 +179,40 @@ class LagouRecruitDataView(views.MethodView):
         # 返回结果
         return jsonify(errno=RET.OK, errmsg='数据保存成功', data=lagouData.to_dict())
 
+    def put(self, positionId):
+        # 参数验证
+        try:
+            positionId = int(positionId)
+        except Exception as e:
+            current_app.logger.error(e)
+            return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
+        position_data = LagouData.objects(positionId=positionId).first()
+        if not position_data:
+            return jsonify(errno=RET.NODATA, errmsg='无数据')
+
+        # 获取参数
+        data_dict = {k:v for k,v in request.form.items()}
+        # 保存数据
+        try:
+            position_data.update(**data_dict)
+        except Exception as e:
+            current_app.logger.error(e)
+            return jsonify(errno=RET.DBERR, errmsg='数据保存错误')
+        position_data = LagouData.objects(positionId=positionId).first()
+        return jsonify(errno=RET.OK, errmsg='OK', data=position_data.to_dict())
+
+    def delete(self, positionId):
+        try:
+            positionId = int(positionId)
+        except Exception as e:
+            return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
+        # 参数校验
+        position_data = LagouData.objects(positionId=positionId).first()
+        if not position_data:
+            return jsonify(errno=RET.NODATA, errmsg='无数据')
+        position_data.delete()
+        return jsonify(errno=RET.OK, errmsg='OK')
+
 recruit_bp.add_url_rule('/duplicateChecking', view_func=DuplicateCheckingView.as_view('duplicateCheckingView'))
-recruit_bp.add_url_rule('/lagou', view_func=LagouRecruitDataView.as_view('lagouView'))
+recruit_bp.add_url_rule('/lagou/', view_func=LagouRecruitDataView.as_view('lagous'), defaults={'positionId':None})
+recruit_bp.add_url_rule('/lagou/<int:positionId>', view_func=LagouRecruitDataView.as_view('lagou'), methods=['GET', 'PUT', 'DELETE'])
