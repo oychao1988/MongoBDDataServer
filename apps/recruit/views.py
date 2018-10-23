@@ -167,8 +167,6 @@ class LagouRecruitDataView(views.MethodView):
     def post(self):
         # 获取参数
         data_dict = {k:v for k,v in request.form.items()}
-
-        # 校验参数
         # 保存数据
         try:
             lagouData = LagouData(**data_dict).save()
@@ -176,8 +174,7 @@ class LagouRecruitDataView(views.MethodView):
             current_app.logger.error(e)
             return jsonify(errno=RET.DBERR, errmsg='数据验证错误')
         # 返回结果
-        print(lagouData.to_dict())
-        return jsonify(lagouData.to_dict())
+        return jsonify(errno=RET.OK, errmsg='数据保存成功', data=lagouData.to_dict())
 
 recruit_bp.add_url_rule('/duplicateChecking', view_func=DuplicateCheckingView.as_view('duplicateCheckingView'))
 recruit_bp.add_url_rule('/lagou', view_func=LagouRecruitDataView.as_view('lagouView'))
