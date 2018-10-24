@@ -18,34 +18,39 @@ class DuplicateCheckingView(views.MethodView):
         :return:
         """
         try:
-            number = request.args.get('number')
+            number = int(request.args.get('number'))
+            updateDate = int(request.args.get('updateDate'))
             source = request.args.get('source')
-            # timestamp = datetime.timestamp(updateDate)
         except Exception as e:
             current_app.logger.error(e)
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
-        if not all([number, source]):
+        if not all([number, source, updateDate]):
             return jsonify(errno=RET.PARAMERR, errmsg='参数不足')
 
         fingerprint = FingerPrint.objects(number=number, source=source).first()
         if fingerprint:
-            data = {  # 'id': fingerprint.id, # TODO 如何返回ID
+            data = {
                 'number': fingerprint.number,
                 'updateDate': fingerprint.updateDate,
                 'source': fingerprint.source
             }
-            return jsonify(errno=RET.OK, errmsg='OK', data=data)
+            # 比较更新日期
+            if updateDate > fingerprint['updateDate']:
+                return jsonify(errno=RET.UPDATE, errmsg='数据可更新', data=data)
+            else:
+                return jsonify(errno=RET.OK, errmsg='数据已存在', data=data)
         else:
             return jsonify(errno=RET.NODATA, errmsg='无数据')
 
     # POST保存指纹
     def post(self):
         try:
-            number = request.form.get('number')
+            number = int(request.form.get('number'))
             updateDate = int(request.form.get('updateDate'))
             source = request.form.get('source')
         except Exception as e:
+            current_app.logger.error(e)
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
         if not all([number, updateDate, source]):
@@ -55,18 +60,7 @@ class DuplicateCheckingView(views.MethodView):
             fingerprint = FingerPrint(number=number, updateDate=updateDate, source=source).save()
         except Exception as e:
             current_app.logger.error(e)
-            fingerprint = FingerPrint.objects(number=number, source=source).first()
-            # 比较更新日期
-            if updateDate > fingerprint['updateDate']:
-                fingerprint.update(updateDate=updateDate)
-                data = {  # 'id': fingerprint.id, # TODO 如何返回ID
-                    'number': fingerprint.number,
-                    'updateDate': fingerprint.updateDate,
-                    'source': fingerprint.source
-                }
-                return jsonify(errno=RET.UPDATE, errmsg='数据已更新', data=data)
-            else:
-                return jsonify(errno=RET.DATAEXIST, errmsg='已存在最新数据')
+            return jsonify(errno=RET.DBERR, errmsg='数据保存错误')
         # 组织返回数据
         data = {  # 'id': fingerprint.id, # TODO 如何返回ID
             'number': fingerprint.number,
@@ -78,7 +72,7 @@ class DuplicateCheckingView(views.MethodView):
     # PUT修改指纹
     def put(self):
         try:
-            number = request.args.get('number')
+            number = int(request.args.get('number'))
             updateDate = int(request.args.get('updateDate'))
             source = request.args.get('source')
             # updateDate = datetime.strptime(updateDate, '%Y-%m-%d %H:%M:%S')
@@ -103,7 +97,7 @@ class DuplicateCheckingView(views.MethodView):
     # DELETE删除指纹
     def delete(self):
         try:
-            number = request.args.get('number')
+            number = int(request.args.get('number'))
             source = request.args.get('source')
         except Exception as e:
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
@@ -116,6 +110,7 @@ class DuplicateCheckingView(views.MethodView):
             return jsonify(errno=RET.NODATA, errmsg='无数据')
         fingerPrint.delete()
         return jsonify(errno=RET.OK, errmsg='OK')
+
 
 # /lagou 拉勾招聘信息数据视图
 class LagouRecruitDataView(views.MethodView):
@@ -167,15 +162,16 @@ class LagouRecruitDataView(views.MethodView):
             }
             return jsonify(errno=RET.OK, errmsg='查询招聘信息列表', data=recruit_data)
 
+    # 增加职位信息
     def post(self, positionId):
         # 获取参数
-        data_dict = {k:v for k,v in request.form.items()}
+        data_dict = {k: str(v) for k, v in request.form.items()}
         # 保存数据
         try:
             lagouData = LagouData(**data_dict).save()
         except Exception as e:
             current_app.logger.error(e)
-            return jsonify(errno=RET.DBERR, errmsg='数据验证错误')
+            return jsonify(errno=RET.DBERR, errmsg='数据保存错误')
         # 返回结果
         return jsonify(errno=RET.OK, errmsg='数据保存成功', data=lagouData.to_dict())
 
@@ -191,7 +187,7 @@ class LagouRecruitDataView(views.MethodView):
             return jsonify(errno=RET.NODATA, errmsg='无数据')
 
         # 获取参数
-        data_dict = {k:v for k,v in request.form.items()}
+        data_dict = {k: str(v) for k, v in request.form.items()}
         # 保存数据
         try:
             position_data.update(**data_dict)
@@ -203,7 +199,7 @@ class LagouRecruitDataView(views.MethodView):
 
     def delete(self, positionId):
         try:
-            positionId = int(positionId)
+            positionId = str(positionId)
         except Exception as e:
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
@@ -213,6 +209,8 @@ class LagouRecruitDataView(views.MethodView):
         position_data.delete()
         return jsonify(errno=RET.OK, errmsg='OK')
 
+
 recruit_bp.add_url_rule('/duplicateChecking', view_func=DuplicateCheckingView.as_view('duplicateCheckingView'))
-recruit_bp.add_url_rule('/lagou/', view_func=LagouRecruitDataView.as_view('lagous'), defaults={'positionId':None})
-recruit_bp.add_url_rule('/lagou/<int:positionId>', view_func=LagouRecruitDataView.as_view('lagou'), methods=['GET', 'PUT', 'DELETE'])
+recruit_bp.add_url_rule('/lagou/', view_func=LagouRecruitDataView.as_view('lagous'), defaults={'positionId': None})
+recruit_bp.add_url_rule('/lagou/<int:positionId>', view_func=LagouRecruitDataView.as_view('lagou'),
+                        methods=['GET', 'PUT', 'DELETE'])

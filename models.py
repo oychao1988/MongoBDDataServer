@@ -6,7 +6,7 @@ class FingerPrint(mongodb.Document):
     meta = {
         'collection': 'fingerPrint'
     }
-    number = mongodb.StringField()
+    number = mongodb.IntField()
     updateDate = mongodb.IntField()
     source = mongodb.StringField()
 
@@ -22,9 +22,9 @@ class LagouData(mongodb.Document):
     # category = mongodb.StringField()  # 工作类别
     # category_url = mongodb.StringField()  # 类别url
 
-    # adWord = mongodb.StringField()
-    # appShow = mongodb.StringField()  # 手机端显示
-    # approve = mongodb.StringField()  # 同意
+    adWord = mongodb.StringField()
+    appShow = mongodb.StringField()  # 手机端显示
+    approve = mongodb.StringField()  # 同意
     businessZones = mongodb.StringField()  # 商业区域
     city = mongodb.StringField()  # 城市
     companyFullName = mongodb.StringField()  # 公司全称
@@ -55,7 +55,7 @@ class LagouData(mongodb.Document):
     pcShow = mongodb.StringField()  # PC端显示
     plus = mongodb.StringField()
     positionAdvantage = mongodb.StringField()  # 职位优势
-    positionId = mongodb.IntField()  # 职位编号
+    positionId = mongodb.StringField()  # 职位编号
     positionLables = mongodb.StringField()  # 职位标签
     positionName = mongodb.StringField()  # 职位名称
     promotionScoreExplain = mongodb.StringField()
