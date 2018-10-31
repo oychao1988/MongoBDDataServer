@@ -9,7 +9,7 @@ app = create_app('develepment')
 @app.route('/')
 def index():
     API = {
-        '/recruit': {
+        '/recruits': {
             '/duplicateChecking': {'GET': {'params':['number', 'updateDate', 'source']},
                                    'POST': {'params':['number', 'updateDate', 'source']},
                                    'PUT': {'params':['number', 'updateDate', 'source']},
@@ -19,7 +19,27 @@ def index():
                        'POST': {'params':[]},
                        'PUT': {'params':[]},
                        'DELETE': {'params':[]},
-            }
+            },
+            '/zhilian': {'GET': {'params': []},
+                       'POST': {'params': []},
+                       'PUT': {'params': []},
+                       'DELETE': {'params': []},
+                       },
+            '/51job': {'GET': {'params': []},
+                       'POST': {'params': []},
+                       'PUT': {'params': []},
+                       'DELETE': {'params': []},
+                       },
+            '/liepin': {'GET': {'params': []},
+                       'POST': {'params': []},
+                       'PUT': {'params': []},
+                       'DELETE': {'params': []},
+                       },
+            '/zhipin': {'GET': {'params': []},
+                       'POST': {'params': []},
+                       'PUT': {'params': []},
+                       'DELETE': {'params': []},
+                       },
         }
     }
     return jsonify(API)
