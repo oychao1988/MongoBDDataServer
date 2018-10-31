@@ -2,7 +2,7 @@ from flask import current_app, jsonify
 from flask import request
 from flask import views
 
-from models import FingerPrint, LagouData
+from models import FingerPrint
 from utils import constants
 from utils.response_code import RET
 from . import recruit_bp
@@ -111,9 +111,10 @@ class DuplicateCheckingView(views.MethodView):
         fingerPrint.delete()
         return jsonify(errno=RET.OK, errmsg='OK')
 
+class BaseRecruitDataView(views.MethodView):
+    COLLECTION = None # 集合模型类
 
-# /lagou 拉勾招聘信息数据视图
-class LagouRecruitDataView(views.MethodView):
+    # 查询职位信息
     def get(self, positionId):
         args = {k: v for k, v in request.args.items()}
         # 单个数据
@@ -128,8 +129,7 @@ class LagouRecruitDataView(views.MethodView):
                 current_app.logger.error(e)
                 return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
 
-            from models import LagouData
-            position_data = LagouData.objects(positionId=positionId).first()
+            position_data = self.COLLECTION.objects(positionId=positionId).first()
             if not position_data:
                 return jsonify(errno=RET.NODATA, errmsg='数据不存在')
             return jsonify(errno=RET.OK, errmsg='OK', data=position_data.to_dict())
@@ -150,8 +150,7 @@ class LagouRecruitDataView(views.MethodView):
                 current_app.logger.error(e)
                 return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
 
-            from models import LagouData
-            paginate = LagouData.objects.paginate(page=page, per_page=per_page)
+            paginate = self.COLLECTION.objects.paginate(page=page, per_page=per_page)
             items = paginate.items
             total_page = paginate.pages
             current_page = paginate.page
@@ -168,13 +167,14 @@ class LagouRecruitDataView(views.MethodView):
         data_dict = {k: str(v) for k, v in request.form.items()}
         # 保存数据
         try:
-            lagouData = LagouData(**data_dict).save()
+            collection = self.COLLECTION(**data_dict).save()
         except Exception as e:
             current_app.logger.error(e)
             return jsonify(errno=RET.DBERR, errmsg='数据保存错误')
         # 返回结果
-        return jsonify(errno=RET.OK, errmsg='数据保存成功', data=lagouData.to_dict())
+        return jsonify(errno=RET.OK, errmsg='数据保存成功', data=collection.to_dict())
 
+    # 更新职位信息
     def put(self, positionId):
         # 参数验证
         try:
@@ -182,7 +182,7 @@ class LagouRecruitDataView(views.MethodView):
         except Exception as e:
             current_app.logger.error(e)
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
-        position_data = LagouData.objects(positionId=positionId).first()
+        position_data = self.COLLECTION.objects(positionId=positionId).first()
         if not position_data:
             return jsonify(errno=RET.NODATA, errmsg='无数据')
 
@@ -194,23 +194,61 @@ class LagouRecruitDataView(views.MethodView):
         except Exception as e:
             current_app.logger.error(e)
             return jsonify(errno=RET.DBERR, errmsg='数据保存错误')
-        position_data = LagouData.objects(positionId=positionId).first()
+        position_data = self.COLLECTION.objects(positionId=positionId).first()
         return jsonify(errno=RET.OK, errmsg='OK', data=position_data.to_dict())
 
+    # 删除职位信息
     def delete(self, positionId):
         try:
             positionId = str(positionId)
         except Exception as e:
             return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
         # 参数校验
-        position_data = LagouData.objects(positionId=positionId).first()
+        position_data = self.COLLECTION.objects(positionId=positionId).first()
         if not position_data:
             return jsonify(errno=RET.NODATA, errmsg='无数据')
         position_data.delete()
         return jsonify(errno=RET.OK, errmsg='OK')
 
+# /lagou 拉勾招聘信息数据视图
+class LagouRecruitDataView(BaseRecruitDataView):
+    COLLECTION = __import__('models').LagouData
 
+# /zhilian 智联招聘信息数据视图
+class ZhilianRecruitDataView(BaseRecruitDataView):
+    COLLECTION = __import__('models').ZhilianData
+
+# /liepin 猎聘招聘信息数据视图
+class LiepinRecruitDataView(BaseRecruitDataView):
+    COLLECTION = __import__('models').LiepinData
+
+# /51job 51job招聘信息数据视图
+class Job51RecruitDataView(BaseRecruitDataView):
+    COLLECTION = __import__('models').Job51Data
+
+# /zhipin BOSS直聘招聘信息数据视图
+class ZhipinRecruitDataView(BaseRecruitDataView):
+    COLLECTION = __import__('models').ZhipinData
+
+# 查重视图
 recruit_bp.add_url_rule('/duplicateChecking', view_func=DuplicateCheckingView.as_view('duplicateCheckingView'))
+# lagou招聘信息试图路由
 recruit_bp.add_url_rule('/lagou/', view_func=LagouRecruitDataView.as_view('lagous'), defaults={'positionId': None})
 recruit_bp.add_url_rule('/lagou/<int:positionId>', view_func=LagouRecruitDataView.as_view('lagou'),
+                        methods=['GET', 'PUT', 'DELETE'])
+# /zhilian 智联招聘信息试图路由
+recruit_bp.add_url_rule('/zhilian/', view_func=ZhilianRecruitDataView.as_view('zhilians'), defaults={'positionId': None})
+recruit_bp.add_url_rule('/zhilian/<int:positionId>', view_func=ZhilianRecruitDataView.as_view('zhilian'),
+                        methods=['GET', 'PUT', 'DELETE'])
+# /liepin 猎聘招聘信息试图路由
+recruit_bp.add_url_rule('/liepin/', view_func=ZhilianRecruitDataView.as_view('liepins'), defaults={'positionId': None})
+recruit_bp.add_url_rule('/liepin/<int:positionId>', view_func=ZhilianRecruitDataView.as_view('liepin'),
+                        methods=['GET', 'PUT', 'DELETE'])
+# /51job 51job招聘信息试图路由
+recruit_bp.add_url_rule('/51job/', view_func=ZhilianRecruitDataView.as_view('51jobs'), defaults={'positionId': None})
+recruit_bp.add_url_rule('/51job/<int:positionId>', view_func=ZhilianRecruitDataView.as_view('51job'),
+                        methods=['GET', 'PUT', 'DELETE'])
+# /zhipin BOSS直聘招聘信息试图路由
+recruit_bp.add_url_rule('/zhipin/', view_func=ZhilianRecruitDataView.as_view('zhipins'), defaults={'positionId': None})
+recruit_bp.add_url_rule('/zhipin/<int:positionId>', view_func=ZhilianRecruitDataView.as_view('zhipin'),
                         methods=['GET', 'PUT', 'DELETE'])

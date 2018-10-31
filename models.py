@@ -135,7 +135,7 @@ class LagouData(mongodb.Document):
         return description
 
 # 智联招聘信息
-class ZhilianItem(mongodb.Document):
+class ZhilianData(mongodb.Document):
     # 指定集合名称
     meta = {'collection': 'zhilianRecruit',
             'ordering': ['-updateDate'],
@@ -178,3 +178,30 @@ class ZhilianItem(mongodb.Document):
     updateDate = mongodb.StringField()
     welfare = mongodb.StringField()
     workingExp = mongodb.StringField()
+
+
+# 猎聘招聘信息
+class LiepinData(mongodb.Document):
+    # 指定集合名称
+    meta = {'collection': 'liepinRecruit',
+            'ordering': ['-updateDate'],
+            'strict': False,
+            }
+
+
+# 51job招聘信息
+class Job51Data(mongodb.Document):
+    # 指定集合名称
+    meta = {'collection': 'job51Recruit',
+            'ordering': ['-updateDate'],
+            'strict': False,
+            }
+
+
+# BOSS直聘招聘信息
+class ZhipinData(mongodb.Document):
+    # 指定集合名称
+    meta = {'collection': 'zhipinRecruit',
+            'ordering': ['-updateDate'],
+            'strict': False,
+            }
