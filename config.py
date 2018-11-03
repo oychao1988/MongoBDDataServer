@@ -2,6 +2,7 @@ import logging
 from werkzeug.routing import BaseConverter
 
 class Config(object):
+    # 通过mongoengine连接mongodb的配置信息
     MONGODB_SETTINGS = {
     'db': 'scrapydb',
     'host': '127.0.0.1',
@@ -9,6 +10,9 @@ class Config(object):
     'username': 'cino',
     'password': 'cino',
     }
+
+    # 通过pymongo直接连接mongodb的配置信息
+    MONGO_AUTH = 'mongodb://cino:cino@127.0.0.1/scrapydb'
 
 
 class DevelepmentConfig(Config):
